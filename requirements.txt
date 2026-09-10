@@ -1,0 +1,5 @@
+odoorpc
+python-dotenv
+# google-api-python-client google-auth-httplib2 google-auth-oauthlib  # for Google Workspace if google_api.py is custom
+# Install with: pip install -r requirements.txt
+# Note: google_api module assumed from google-workspace skill or local

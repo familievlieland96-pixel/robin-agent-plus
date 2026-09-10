@@ -13,8 +13,8 @@ import os
 import json
 from datetime import datetime
 
-EMAIL = "islabossmann@gmail.com"
-APP_PASSWORD = "fketsdauloxpeami"  # From latest user input (fket sdau loxp eami)
+EMAIL = os.getenv("BOSS_EMAIL", "islabossmann@gmail.com")
+APP_PASSWORD = os.getenv("BOSS_APP_PASSWORD", "your_app_password_here")
 IMAP_SERVER = "imap.gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 

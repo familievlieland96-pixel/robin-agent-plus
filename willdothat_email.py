@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 """
 WillDoThat Back Office Email Client
-Separate account: islawilldothat@gmail.com
+Separate account for WillDoThat. Loads credentials from .env (WILL_EMAIL, WILL_APP_PASSWORD).
+Uses App Password for Gmail. See .env.example.
 """
 import imaplib
 import smtplib
 import email
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import os
 import json
 from datetime import datetime
 
-EMAIL = "islawilldothat@gmail.com"
-APP_PASSWORD = "zxobaovljzumrbbd"
+EMAIL = os.getenv("WILL_EMAIL", "islawilldothat@gmail.com")
+APP_PASSWORD = os.getenv("WILL_APP_PASSWORD", "your_app_password_here")
 IMAP_SERVER = "imap.gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 

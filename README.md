@@ -48,14 +48,31 @@ We leave the original Robin Agent exactly as it is for the client. This addon is
 ```bash
 git clone https://github.com/familievlieland96-pixel/robin-agent-plus.git
 cd robin-agent-plus
-pip install -r requirements.txt  # if any
-# Copy .env.example to .env and fill credentials
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your Odoo creds, Gmail App Passwords (BOSS_*, WILL_*). Never commit secrets.
+```
+
+## Total Integration (Robin Agent + Addon)
+The repo now delivers the **total integrated system**: original Robin Agent (simple, untouched for beginner client) + this Plus addon layer for full business ops.
+
+- Python scripts provide Odoo CRM, backoffice emails (Bossman/WillDoThat accounts), Google integration.
+- `main_integration.py` is the orchestrator tying it all (CRM leads → calendar → email, inbox monitoring).
+- `robin-addon/SKILL.md` + loaded Hermes skills (odoo-crm, google-workspace, xurl, etc.) cover all shopping list gaps.
+- Security: env-based creds, SkillSpector recommended before runs.
+- No Microsoft. Lean for island businesses.
+
+Test with:
+```bash
+python main_integration.py --full-demo
 ```
 
 ## Usage
-Load the `robin-addon` skill in Hermes Agent.
+Load `robin-addon` skill in Hermes.
 
-All commands are available through our tools and the Odoo connection.
+Run orchestrator for demos or integrate into cron/Bossman workflows.
+
+All components available through our tools, Odoo, and main_integration.py. Original client Robin stays simple.
 
 ## License
 MIT — free for personal and commercial use.
