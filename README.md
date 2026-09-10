@@ -46,7 +46,7 @@ We leave the original Robin Agent exactly as it is for the client. This addon is
 
 ## Installation
 ```bash
-git clone https://github.com/ykycportal/robin-agent-plus.git
+git clone https://github.com/familievlieland96-pixel/robin-agent-plus.git
 cd robin-agent-plus
 pip install -r requirements.txt  # if any
 # Copy .env.example to .env and fill credentials
