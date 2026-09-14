@@ -47,12 +47,12 @@ It connects research, Google Workspace, email, PDF generation, and our scraping 
 3. Add AI layer (WillDoThat reviews, Secretary sends summary, Bossman orchestrates).
    - Completion: Actionable output delivered to the client.
 4. Log everything in our system for future improvement.
-   - Completion: Entry in memory or Supabase.
+   - Completion: Entry in Hermes memory or the client's Odoo (no Supabase in the stack).
 
 ## Pitfalls
 - Robin Agent is for beginners — keep the addon simple so the client doesn't get overwhelmed.
 - Avoid heavy dependencies — we use only what we already have.
-- Test on the client's hardware (Apple and Windows) before delivery.
+- Test on the client's hardware (Apple and Windows) and our own (Termux/Android phone, VPS) before delivery.
 - Security first — always scan any new code with our environment-aware-scanner.
 
 ## Verification
