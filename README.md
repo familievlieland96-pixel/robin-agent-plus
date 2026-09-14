@@ -6,6 +6,15 @@ This repo is the "Robin Agent Plus" addon. It takes the original Robin Agent (bu
 
 We leave the original Robin Agent exactly as it is for the client. This addon is the optional "pro" layer for real business use.
 
+## What this repo actually ships (honest scope)
+Code in this repo:
+- `odoo_crm.py` — CRM leads/follow-ups via odoorpc; Google Calendar follow-up events + welcome email via the optional `google_api` module (graceful no-op when absent; the result reports exactly what happened)
+- `backoffice_email.py` / `willdothat_email.py` — IMAP/SMTP clients for the Bossman & WillDoThat backoffice inboxes (App Passwords, from `.env`)
+- `main_integration.py` — orchestrator: `--crm`, `--email-check`, `--full-demo`; skips a step loudly with the exact reason + fix when a dependency is missing
+- `robin-addon/SKILL.md` — Hermes skill instructions covering the 8 shopping-list gaps with our tool set
+
+Everything labelled "via Odoo" below is provided by **your Odoo instance** (modules + admin UI), not by code in this repo. No payment-gateway code, no Shopify connector, no Supabase backend ships here.
+
 ## Original Shopping List & What We Fixed
 
 ### Core (1-7) — All fixed
@@ -14,8 +23,8 @@ We leave the original Robin Agent exactly as it is for the client. This addon is
 3. Accounting / Bookkeeping — **[FIXED with Odoo + Google Sheets dashboards]**
 4. Inventory Management — **[FIXED with Odoo + our product-price-monitor and xlsx skills]**
 5. Order Fulfillment — **[FIXED with Odoo + maps + supplier research from our tools]**
-6. Payment Processing — **[FIXED with Odoo + Stripe/PayPal via Supabase]**
-7. E-commerce Platform — **[FIXED with Odoo website + Shopify connector]**
+6. Payment Processing — **[COVERED by your Odoo instance]** Odoo Payments module (Stripe/PayPal) configured in admin UI. No payment code in this repo.
+7. E-commerce Platform — **[COVERED by your Odoo instance]** Odoo e-commerce/website module (external Shopify/Supabase connectors optional, not in this repo).
 
 ### Important Gaps (8-15) — Most fixed
 8. Social Media Posting — **[FIXED with our xurl skill + scheduling]**
@@ -34,15 +43,15 @@ We leave the original Robin Agent exactly as it is for the client. This addon is
 19. HR / Payroll — **[FIXED with Odoo HR/Payroll]**
 20. Video Production — **[FIXED with bfl_flux3 video generation (text-to-video, image-to-video, audio-to-video) + our manim and ascii-video tools]**
 
-**Summary:** 18 of the 20 gaps are now covered. The addon turns Robin into a complete business operating system while keeping the original simple for the beginner client.
+**Summary:** of the 20 gaps, 1 is PARTIAL (paid-ads automation) and 1 is explicitly out of scope (business registration). The remaining 18 are covered **by the Odoo instance (modules in the admin UI) plus the Hermes skills in our tool set** — this repo ships the Odoo CRM client, the two back-office email clients, the orchestrator, and the `robin-addon` skill instructions. What runs on a fresh clone: the code below, not a magic full-stack install.
 
 ## What the Addon Adds
 - AI orchestration (Bossman, WillDoThat, Secretary)
 - Security-first (environment-aware-scanner with SkillSpector fallback)
-- Integration with Google Workspace (Gmail, Calendar, Drive, Sheets, Docs)
-- Odoo as the ERP backend
-- Our research, scraping, document, and video tools
-- Clean approval workflows and logging
+- Google Workspace integration via the optional `google_api` module (graceful no-op + honest status when absent)
+- Your Odoo instance as the ERP backend (this repo ships only the client code)
+- Our research, scraping, document, and video tools (Hermes skills, referenced by `robin-addon`)
+- Every script reports exactly what it did — skips say "skipped + reason", no silent stubs
 
 ## Installation
 ```bash
