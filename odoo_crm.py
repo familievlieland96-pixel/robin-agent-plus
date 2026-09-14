@@ -12,7 +12,24 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 import odoorpc
-from google_api import gmail, calendar  # Reuse our existing Google Workspace tools
+
+# Reuse our existing Google Workspace tools when present.
+# google_api.py is an external/custom module (from the google-workspace skill or
+# a local install). It is NOT part of this repo, so a missing module must not
+# take the whole CRM down — degrade to no-ops and say so in the results.
+try:
+    from google_api import gmail, calendar
+    GOOGLE_AVAILABLE = True
+except ImportError:
+    GOOGLE_AVAILABLE = False
+    class _Noop:
+        def __call__(self, *a, **k):
+            return {"status": "unavailable", "reason": "google_api module not found"}
+    class _NoopGroup:
+        create = _Noop()
+        send = _Noop()
+    gmail = _NoopGroup()
+    calendar = _NoopGroup()
 
 # Load from .env if available
 env_path = Path("~/.hermes/.env").expanduser()
@@ -55,23 +72,34 @@ def create_lead(name, email, phone=None, source="Website", description=""):
     
     lead_id = odoo.execute('crm.lead', 'create', [lead_data])
     print(f"✓ Lead created with ID: {lead_id}")
-    
-    # Create Google Calendar event for follow-up (2 days from now)
-    calendar.create(
-        summary=f"Follow up with {name}",
-        start=(datetime.now() + timedelta(days=2)).isoformat(),
-        end=(datetime.now() + timedelta(days=2, hours=1)).isoformat(),
-        description=f"Lead ID: {lead_id}\nEmail: {email}\nSource: {source}"
-    )
-    
-    # Send welcome email via Gmail
-    gmail.send(
-        to=email,
-        subject=f"Welcome {name} - Let's get started with your project",
-        body=f"Hi {name},\n\nThank you for your interest. I've created your lead in our system and scheduled a follow-up.\n\nBest,\nSecretary for Bossman"
-    )
-    
-    return {"status": "success", "lead_id": lead_id, "message": "Lead created, calendar event scheduled, welcome email sent"}
+
+    notes = []
+    if GOOGLE_AVAILABLE:
+        # Create Google Calendar event for follow-up (2 days from now)
+        calendar.create(
+            summary=f"Follow up with {name}",
+            start=(datetime.now() + timedelta(days=2)).isoformat(),
+            end=(datetime.now() + timedelta(days=2, hours=1)).isoformat(),
+            description=f"Lead ID: {lead_id}\nEmail: {email}\nSource: {source}"
+        )
+        notes.append("calendar event scheduled")
+
+        # Send welcome email via Gmail
+        gmail.send(
+            to=email,
+            subject=f"Welcome {name} - Let's get started with your project",
+            body=f"Hi {name},\n\nThank you for your interest. I've created your lead in our system and scheduled a follow-up.\n\nBest,\nSecretary for Bossman"
+        )
+        notes.append("welcome email sent")
+    else:
+        notes.append("Google Workspace skipped (google_api module not available)")
+
+    return {
+        "status": "success",
+        "lead_id": lead_id,
+        "message": "Lead created: " + ", ".join(notes),
+        "google_workspace_available": GOOGLE_AVAILABLE,
+    }
 
 def add_followup(lead_id, note, next_action=""):
     odoo = connect_to_odoo()
