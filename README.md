@@ -13,7 +13,7 @@ Code in this repo:
 - `main_integration.py` — orchestrator: `--crm`, `--email-check`, `--full-demo`; skips a step loudly with the exact reason + fix when a dependency is missing
 - `robin-addon/SKILL.md` — Hermes skill instructions covering the 8 shopping-list gaps with our tool set
 
-Everything labelled "via Odoo" below is provided by **your Odoo instance** (modules + admin UI), not by code in this repo. No payment-gateway code, no Shopify connector, no Supabase backend ships here.
+Everything labelled "via Shopify" is handled by the **Shopify store** (payments, storefront) — a must-have in the stack, not by code in this repo. Everything labelled "via Odoo" is provided by **your Odoo instance** (modules + admin UI). This repo ships only the client code, the back-office email clients, the orchestrator, and the skill instructions.
 
 ## Original Shopping List & What We Fixed
 
@@ -23,8 +23,8 @@ Everything labelled "via Odoo" below is provided by **your Odoo instance** (modu
 3. Accounting / Bookkeeping — **[FIXED with Odoo + Google Sheets dashboards]**
 4. Inventory Management — **[FIXED with Odoo + our product-price-monitor and xlsx skills]**
 5. Order Fulfillment — **[FIXED with Odoo + maps + supplier research from our tools]**
-6. Payment Processing — **[COVERED by your Odoo instance]** Odoo Payments module (Stripe/PayPal) configured in admin UI. No payment code in this repo.
-7. E-commerce Platform — **[COVERED by your Odoo instance]** Odoo e-commerce/website module (external Shopify/Supabase connectors optional, not in this repo).
+6. Payment Processing — **[FIXED via Shopify (a must)]** Payment gateway (Stripe/PayPal etc.) handled store-side through Shopify. No payment code lives in this repo.
+7. E-commerce Platform — **[FIXED via Shopify (a must)]** Storefront runs on Shopify; this addon layers business ops on top. No storefront code in this repo.
 
 ### Important Gaps (8-15) — Most fixed
 8. Social Media Posting — **[FIXED with our xurl skill + scheduling]**
