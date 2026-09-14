@@ -44,6 +44,11 @@ except ImportError:
 def run_crm_example():
     """Example of full CRM + email + calendar flow."""
     if not ODOO_AVAILABLE:
+        print(json.dumps({
+            "status": "skipped",
+            "reason": "Odoo CRM module unavailable — 'odoorpc' not installed "
+                      "or odoo_crm.py import failed. Run: pip install odoorpc",
+        }, indent=2))
         return {"status": "error", "message": "Odoo module not available. Install odoorpc and check imports."}
     result = create_lead(
         name="Test Island Business Lead",
