@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
 WillDoThat Back Office Email Client
-Separate account for WillDoThat. Loads credentials from .env (WILL_EMAIL, WILL_APP_PASSWORD).
-Uses App Password for Gmail. See .env.example.
+Separate account for WillDoThat (the Captain's right hand).
+Personal by design: the repo ships NO real address or password.
+Copy .env.example to .env and fill WILL_EMAIL / WILL_APP_PASSWORD
+(on a new machine, create the account fresh - it does not travel).
+Uses App Password for Gmail.
 """
 import imaplib
 import smtplib
@@ -13,12 +16,20 @@ import os
 import json
 from datetime import datetime
 
-EMAIL = os.getenv("WILL_EMAIL", "islawilldothat@gmail.com")
-APP_PASSWORD = os.getenv("WILL_APP_PASSWORD", "your_app_password_here")
+EMAIL = os.getenv("WILL_EMAIL", "")
+APP_PASSWORD = os.getenv("WILL_APP_PASSWORD", "")
 IMAP_SERVER = "imap.gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 
+def _configured():
+    if not EMAIL or not APP_PASSWORD:
+        return "WILL_EMAIL / WILL_APP_PASSWORD not set. Copy .env.example to .env and fill them in (see FIRST_BOOT.md)."
+    return None
+
 def check_inbox(max_messages=5):
+    uncfg = _configured()
+    if uncfg:
+        return {"status": "error", "account": "WillDoThat", "error": uncfg, "timestamp": datetime.now().isoformat()}
     try:
         mail = imaplib.IMAP4_SSL(IMAP_SERVER)
         mail.login(EMAIL, APP_PASSWORD)

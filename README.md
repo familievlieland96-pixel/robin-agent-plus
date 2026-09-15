@@ -59,8 +59,15 @@ git clone https://github.com/familievlieland96-pixel/robin-agent-plus.git
 cd robin-agent-plus
 pip install -r requirements.txt
 cp .env.example .env
-# Edit .env with your Odoo creds, Gmail App Passwords (BOSS_*, WILL_*). Never commit secrets.
+# Edit .env with your OWN Odoo creds, Gmail App Passwords (BOSS_*, WILL_*). Never commit secrets.
 ```
+
+**The agents move, the connections never do.** This repo ships zero
+personal credentials: no API keys, no passwords, no tokens, no email
+accounts. On any new device / new human, read `FIRST_BOOT.md` first —
+it is the ordered connections checklist (LLM -> Google Workspace ->
+GitHub -> Odoo -> API skills). Every module fails loudly with the exact
+`.env` var name while a placeholder is still there.
 
 ## Total Integration (Robin Agent + Addon)
 The repo now delivers the **total integrated system**: original Robin Agent (simple, untouched for beginner client) + this Plus addon layer for full business ops.

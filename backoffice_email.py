@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Back Office Email Client for Bossman (islabossmann@gmail.com)
-Managed by Secretary for Bossman.
-Uses App Password for IMAP/SMTP.
+Back Office Email Client (boss account)
+Managed by Secretary. Uses App Password for IMAP/SMTP.
+Personal by design: the repo ships NO real address or password.
+Copy .env.example to .env and fill BOSS_EMAIL / BOSS_APP_PASSWORD
+(on a new machine, create the account fresh - it does not travel).
 """
 import imaplib
 import smtplib
@@ -13,13 +15,21 @@ import os
 import json
 from datetime import datetime
 
-EMAIL = os.getenv("BOSS_EMAIL", "islabossmann@gmail.com")
-APP_PASSWORD = os.getenv("BOSS_APP_PASSWORD", "your_app_password_here")
+EMAIL = os.getenv("BOSS_EMAIL", "")
+APP_PASSWORD = os.getenv("BOSS_APP_PASSWORD", "")
 IMAP_SERVER = "imap.gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 
+def _configured():
+    if not EMAIL or not APP_PASSWORD:
+        return "BOSS_EMAIL / BOSS_APP_PASSWORD not set. Copy .env.example to .env and fill them in (see FIRST_BOOT.md)."
+    return None
+
 def check_inbox(max_messages=10):
     """Check inbox for new messages."""
+    uncfg = _configured()
+    if uncfg:
+        return {"status": "error", "error": uncfg, "timestamp": datetime.now().isoformat()}
     try:
         mail = imaplib.IMAP4_SSL(IMAP_SERVER)
         mail.login(EMAIL, APP_PASSWORD)
@@ -46,7 +56,10 @@ def check_inbox(max_messages=10):
         return {"status": "error", "error": str(e), "timestamp": datetime.now().isoformat()}
 
 def send_email(to, subject, body, html=False):
-    """Send email from Bossman's account."""
+    """Send email from the boss back-office account."""
+    uncfg = _configured()
+    if uncfg:
+        return {"status": "error", "error": uncfg}
     try:
         msg = MIMEMultipart('alternative')
         msg['From'] = f"Bossman <{EMAIL}>"
@@ -75,5 +88,5 @@ if __name__ == "__main__":
             print(json.dumps(result, indent=2))
     else:
         print("Usage: python backoffice_email.py check | send <to> <subject> <body>")
-        print("Current status for islabossmann@gmail.com (Bossman account managed by Secretary)")
+        print("Boss back-office inbox (credentials from .env - see FIRST_BOOT.md)")
         print(json.dumps(check_inbox(), indent=2))
